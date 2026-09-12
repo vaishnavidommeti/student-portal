@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IN CAMP | Student registration</title>
+    <link rel="stylesheet" href="{% static 'STUDENTS/style.css' %}">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="{% url 'home' %}" aria-label="IN CAMP home"><span class="brand-mark">I</span><span>IN CAMP</span></a>
+        <span class="topbar-note">Your next chapter starts here</span>
+    </header>
+    <main>
+        <section class="intro" aria-labelledby="welcome-title">
+            <div class="intro-copy">
+                <p class="eyebrow">STUDENT HUB <span></span></p>
+                <h1 id="welcome-title">Make your<br><em>first move.</em></h1>
+                <p class="intro-text">Register your details and take the first step toward a campus experience built around you.</p>
+                <div class="trust-row"><div class="avatar-stack" aria-hidden="true"><span>J</span><span>M</span><span>A</span><span>+</span></div><p>Join a growing community<br>of ambitious students.</p></div>
+            </div>
+            <div class="form-panel" id="register">
+                <div class="panel-heading"><div><p class="step-label">STEP 01 <span>OF 01</span></p><h2>Create your student profile</h2></div><div class="check-icon" aria-hidden="true">&#10003;</div></div>
+                <p class="panel-subtitle">A few details are all we need to get you started.</p>
+                {% if messages %}{% for message in messages %}<div class="success-message" role="status"><span>&#10003;</span>{{ message }}</div>{% endfor %}{% endif %}
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% for field in form %}<div class="field {% if field.errors %}has-error{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}</div>{% endfor %}
+                    <button type="submit" class="submit-button">Complete registration <span aria-hidden="true">&#8594;</span></button>
+                </form>
+                <p class="privacy-note"><span aria-hidden="true">&#128274;</span> Your information stays private and secure.</p>
+            </div>
+        </section>
+    </main>
+    <footer><span>IN CAMP</span><span>Built for curious minds.</span></footer>
+</body>
+</html>
