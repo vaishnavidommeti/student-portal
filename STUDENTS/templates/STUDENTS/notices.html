@@ -1,0 +1,6 @@
+{% extends 'STUDENTS/base.html' %}
+{% block title %}Notices | IN CAMP{% endblock %}
+{% block content %}
+<div class="page-heading compact-heading"><div><p class="eyebrow">CAMPUS BULLETIN</p><h1>Notices</h1><p class="lead">Updates relevant to {{ request.user.student_profile.department }}.</p></div></div>
+{% if notices %}<div class="notice-list">{% for notice in notices %}<article class="notice-card"><div class="notice-meta"><time>{{ notice.published_at|date:'M j, Y' }}</time>{% if notice.department %}<span>{{ notice.department }}</span>{% else %}<span>Campus-wide</span>{% endif %}</div><h2>{{ notice.title }}</h2><div class="notice-body">{{ notice.body|linebreaks }}</div></article>{% endfor %}</div>{% else %}<div class="empty-state large-empty"><span class="empty-icon" aria-hidden="true">N</span><strong>No notices at the moment</strong><p>New campus and department announcements will appear here.</p></div>{% endif %}
+{% endblock %}

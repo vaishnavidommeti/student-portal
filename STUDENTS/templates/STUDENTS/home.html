@@ -1,38 +1,39 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IN CAMP | Student registration</title>
-    <link rel="stylesheet" href="{% static 'STUDENTS/style.css' %}">
-</head>
-<body>
-    <header class="topbar">
-        <a class="brand" href="{% url 'home' %}" aria-label="IN CAMP home"><span class="brand-mark">I</span><span>IN CAMP</span></a>
-        <span class="topbar-note">Your next chapter starts here</span>
-    </header>
-    <main>
-        <section class="intro" aria-labelledby="welcome-title">
-            <div class="intro-copy">
-                <p class="eyebrow">STUDENT HUB <span></span></p>
-                <h1 id="welcome-title">Make your<br><em>first move.</em></h1>
-                <p class="intro-text">Register your details and take the first step toward a campus experience built around you.</p>
-                <div class="trust-row"><div class="avatar-stack" aria-hidden="true"><span>J</span><span>M</span><span>A</span><span>+</span></div><p>Join a growing community<br>of ambitious students.</p></div>
+{% extends 'STUDENTS/base.html' %}
+{% block title %}Create your account | IN CAMP{% endblock %}
+{% block content %}
+<section class="welcome-layout">
+    <div class="welcome-copy">
+        <p class="eyebrow">SMART CAMPUS OPERATIONS</p>
+        <h1>Student success<br>starts with <em>clarity.</em></h1>
+        <p class="lead">From registration to results, IN CAMP brings your academic journey into one organized, professional space.</p>
+
+        <div class="feature-list">
+            <div class="feature-item"><span class="feature-bullet">✓</span><span>Manage subjects, attendance, and grades in one place.</span></div>
+            <div class="feature-item"><span class="feature-bullet">✓</span><span>Track assignments and stay on top of deadlines.</span></div>
+            <div class="feature-item"><span class="feature-bullet">✓</span><span>Receive notices and updates from your campus community.</span></div>
+        </div>
+
+        <div class="welcome-note"><span class="welcome-mark" aria-hidden="true">C</span><span>One student profile. One connected academic year.</span></div>
+    </div>
+
+    <section class="surface signup-panel" aria-labelledby="signup-title">
+        <p class="eyebrow">STUDENT REGISTRATION</p>
+        <h2 id="signup-title">Create your account</h2>
+        <p class="muted">Set up your profile to get started.</p>
+        <form method="post" class="form-grid" novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+            <div class="form-field {% if field.errors %}has-error{% endif %} {% if field.name == 'password1' or field.name == 'password2' %}span-two{% endif %}">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<small class="help-text">{{ field.help_text|safe }}</small>{% endif %}
+                {% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
             </div>
-            <div class="form-panel" id="register">
-                <div class="panel-heading"><div><p class="step-label">STEP 01 <span>OF 01</span></p><h2>Create your student profile</h2></div><div class="check-icon" aria-hidden="true">&#10003;</div></div>
-                <p class="panel-subtitle">A few details are all we need to get you started.</p>
-                {% if messages %}{% for message in messages %}<div class="success-message" role="status"><span>&#10003;</span>{{ message }}</div>{% endfor %}{% endif %}
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    {% for field in form %}<div class="field {% if field.errors %}has-error{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<small class="error">{{ error }}</small>{% endfor %}</div>{% endfor %}
-                    <button type="submit" class="submit-button">Complete registration <span aria-hidden="true">&#8594;</span></button>
-                </form>
-                <p class="privacy-note"><span aria-hidden="true">&#128274;</span> Your information stays private and secure.</p>
-            </div>
-        </section>
-    </main>
-    <footer><span>IN CAMP</span><span>Built for curious minds.</span></footer>
-</body>
-</html>
+            {% endfor %}
+            <button type="submit" class="button button-primary span-two">Create student account <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="form-footnote">Already registered? <a href="{% url 'login' %}">Sign in</a></p>
+    </section>
+</section>
+{% endblock %}

@@ -4,3 +4,8 @@ db.sqlite3
 .venv/
 venv/
 env/
+.env
+.env.*
+!.env.example
+staticfiles/
+media/

@@ -1,0 +1,77 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#7b3040">
+    <title>{% block title %}IN CAMP | Student portal{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'STUDENTS/portal.css' %}?v=ivory-burgundy-1">
+</head>
+<body class="{% if user.is_authenticated %}portal-body{% else %}guest-body{% endif %}">
+{% if user.is_authenticated %}
+<div class="portal-shell">
+    <aside class="portal-sidebar">
+        <div class="sidebar-brand-wrap">
+            <a class="brand brand-light" href="{% url 'dashboard' %}">
+                <span class="brand-mark" aria-hidden="true">I</span><span>IN CAMP</span>
+            </a>
+        </div>
+
+        <div class="sidebar-profile">
+            <div class="avatar-badge">{% if user.first_name %}{{ user.first_name|slice:":1"|upper }}{% else %}{{ user.username|slice:":1"|upper }}{% endif %}</div>
+            <div>
+                <span class="sidebar-label">Signed in</span>
+                <strong>{{ user.first_name|default:user.username }}</strong>
+            </div>
+        </div>
+
+        <nav class="side-nav" aria-label="Main dashboard navigation">
+            <a href="{% url 'dashboard' %}">Overview</a>
+            <a href="{% url 'subjects' %}">Subjects</a>
+            <a href="{% url 'attendance' %}">Attendance</a>
+            <a href="{% url 'grades' %}">Grades</a>
+            <a href="{% url 'assignments' %}">Assignments</a>
+            <a href="{% url 'notices' %}">Notices</a>
+            {% if user.is_staff %}<a href="{% url 'staff_dashboard' %}">Staff</a>{% endif %}
+        </nav>
+
+        <div class="sidebar-actions">
+            <a class="sidebar-link" href="{% url 'profile_edit' %}">My profile</a>
+            <form action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="text-button" type="submit">Sign out</button></form>
+        </div>
+    </aside>
+
+    <div class="portal-main">
+        <header class="portal-topbar">
+            <div>
+                <p class="eyebrow eyebrow-soft">Student portal</p>
+                <h2>Campus dashboard</h2>
+            </div>
+            <div class="topbar-actions">
+                <a class="profile-link" href="{% url 'profile_edit' %}">{{ user.first_name|default:user.username }}</a>
+                <form action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="text-button" type="submit">Sign out</button></form>
+            </div>
+        </header>
+        {% if messages %}<div class="message-stack" aria-live="polite">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+{% else %}
+<header class="site-header">
+    <a class="brand" href="{% url 'home' %}">
+        <span class="brand-mark" aria-hidden="true">I</span><span>IN CAMP</span>
+    </a>
+    <nav class="guest-nav" aria-label="Account navigation"><a href="{% url 'login' %}">Sign in</a><a class="button button-small button-dark" href="{% url 'home' %}#signup-title">Register</a></nav>
+</header>
+{% if messages %}<div class="message-stack" aria-live="polite">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+{% endif %}
+<main class="page-shell{% if not user.is_authenticated %} guest-shell{% endif %}">
+    {% block content %}{% endblock %}
+</main>
+{% if user.is_authenticated %}
+        <footer class="site-footer"><span>IN CAMP <span class="footer-dot">/</span> Student portal</span><span>Academic year, in good order.</span></footer>
+    </div>
+</div>
+{% else %}
+<footer class="site-footer"><span>IN CAMP <span class="footer-dot">/</span> Student portal</span><span>Academic year, in good order.</span></footer>
+{% endif %}
+</body>
+</html>

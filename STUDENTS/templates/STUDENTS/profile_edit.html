@@ -1,0 +1,6 @@
+{% extends 'STUDENTS/base.html' %}
+{% block title %}Edit profile | IN CAMP{% endblock %}
+{% block content %}
+<div class="page-heading compact-heading"><div><p class="eyebrow">STUDENT PROFILE</p><h1>Edit your details</h1><p class="lead">Keep your academic information up to date.</p></div><a class="button button-outline" href="{% url 'dashboard' %}">Back to overview</a></div>
+<section class="surface form-surface"><div class="form-summary"><span class="eyebrow">STUDENT ID</span><strong>{{ student.student_id }}</strong><span>{{ student.email }}</span></div><form method="post" class="form-grid">{% csrf_token %}{{ form.non_field_errors }}{% for field in form %}<div class="form-field {% if field.errors %}has-error{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>{% endfor %}<div class="form-actions span-two"><a class="button button-outline" href="{% url 'dashboard' %}">Cancel</a><button class="button button-primary" type="submit">Save profile</button></div></form></section>
+{% endblock %}

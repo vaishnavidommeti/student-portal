@@ -1,0 +1,9 @@
+{% extends 'STUDENTS/base.html' %}
+{% block title %}{{ title }} | IN CAMP{% endblock %}
+{% block content %}
+<div class="page-heading compact-heading"><div><p class="eyebrow">ACADEMICS</p><h1>{{ title }}</h1><p class="lead">{{ description }}</p></div></div>
+<section class="table-surface" aria-label="{{ title }}">
+    {% if rows %}<div class="table-scroll"><table><thead><tr>{% for column in columns %}<th scope="col">{{ column }}</th>{% endfor %}</tr></thead><tbody>{% for row in rows %}<tr>{% for value in row %}<td>{{ value|default:'—' }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+    {% else %}<div class="empty-state table-empty"><span class="empty-icon" aria-hidden="true">—</span><strong>{{ empty_message }}</strong><p>Check back here for updates from your department.</p></div>{% endif %}
+</section>
+{% endblock %}

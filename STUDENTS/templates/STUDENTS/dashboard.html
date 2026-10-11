@@ -1,0 +1,84 @@
+{% extends 'STUDENTS/base.html' %}
+{% block title %}Overview | IN CAMP{% endblock %}
+{% block content %}
+<div class="dashboard-hero surface">
+    <div class="hero-copy">
+        <p class="eyebrow">STUDENT OVERVIEW</p>
+        <h1>Good to see you, {{ student.name }}.</h1>
+        <p class="lead">Your academic snapshot for {{ student.department }}.</p>
+    </div>
+    <div class="quick-actions">
+        <a class="button button-primary" href="{% url 'subjects' %}">View subjects</a>
+        <a class="button button-outline" href="{% url 'profile_edit' %}">Edit profile</a>
+    </div>
+</div>
+
+<div class="identity-strip">
+    <span class="identity-label">STUDENT ID</span>
+    <strong>{{ student.student_id }}</strong>
+    <span class="identity-divider"></span>
+    <span>{{ student.get_year_display|default:student.year }} <span class="muted">·</span> {{ student.semester }}</span>
+    <span class="identity-divider"></span>
+    <span>{{ student.department }}</span>
+</div>
+
+<section class="stats-grid stats-grid-focus" aria-label="Academic summary">
+    <article class="stat-card metric-card">
+        <span class="stat-label">ENROLLED SUBJECTS</span>
+        <strong>{{ subject_count|stringformat:'02d' }}</strong>
+        <a href="{% url 'subjects' %}">View subjects <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="stat-card stat-accent metric-card">
+        <span class="stat-label">ATTENDANCE</span>
+        <strong>{% if attendance_rate is not None %}{{ attendance_rate }}<small>%</small>{% else %}—{% endif %}</strong>
+        <a href="{% url 'attendance' %}">{% if attendance_rate is not None %}View record{% else %}No records yet{% endif %} <span aria-hidden="true">→</span></a>
+    </article>
+</section>
+
+<div class="dashboard-grid dashboard-grid-focus">
+    <section class="content-section">
+        <div class="panel surface">
+            <div class="section-heading">
+                <div><p class="eyebrow">CURRENT TERM</p><h2>Enrolled subjects</h2></div>
+                <a class="inline-link" href="{% url 'subjects' %}">All subjects →</a>
+            </div>
+            {% if enrollments %}
+                <div class="list-surface">
+                    {% for enrollment in enrollments %}
+                        <div class="list-row">
+                            <span class="list-marker">{{ enrollment.subject.code }}</span>
+                            <span class="list-main"><strong>{{ enrollment.subject.title }}</strong><small>{{ enrollment.subject.department }} · {{ enrollment.subject.get_semester_display }}</small></span>
+                            <span class="list-meta">{{ enrollment.subject.credits }} credits</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state"><strong>No subjects assigned yet</strong><p>Your active enrollments will appear here.</p></div>
+            {% endif %}
+        </div>
+    </section>
+
+    <aside class="side-column">
+        <section class="panel surface">
+            <div class="section-heading">
+                <div><p class="eyebrow">ACADEMIC TRACK</p><h2>Attendance</h2></div>
+                <a class="inline-link" href="{% url 'attendance' %}">Full record →</a>
+            </div>
+
+            {% if attendance_rate is not None %}
+                <div class="attendance-summary">
+                    <div class="attendance-ring" style="--attendance: {{ attendance_rate }};">
+                        <span>{{ attendance_rate }}%</span>
+                    </div>
+                    <div class="attendance-copy">
+                        <strong>Current attendance</strong>
+                        <p>Your present and late sessions are tracked automatically for this term.</p>
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-state"><strong>No attendance recorded yet</strong><p>Your class attendance will appear here once entries are added.</p></div>
+            {% endif %}
+        </section>
+    </aside>
+</div>
+{% endblock %}

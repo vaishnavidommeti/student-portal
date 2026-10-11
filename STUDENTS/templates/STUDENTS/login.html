@@ -1,0 +1,22 @@
+{% extends 'STUDENTS/base.html' %}
+{% block title %}Sign in | IN CAMP{% endblock %}
+{% block content %}
+<section class="auth-layout">
+    <div class="auth-copy">
+        <p class="eyebrow">WELCOME BACK</p>
+        <h1>Your next step<br>starts <em>here.</em></h1>
+        <p class="lead">Sign in to review your timetable, check performance, and stay connected to student updates.</p>
+    </div>
+    <section class="surface auth-panel" aria-labelledby="login-title">
+        <p class="eyebrow">STUDENT ACCOUNT</p>
+        <h2 id="login-title">Sign in</h2>
+        <form method="post" class="stack-form">
+            {% csrf_token %}{{ form.non_field_errors }}
+            {% for field in form %}<div class="form-field {% if field.errors %}has-error{% endif %}"><label for="{{ field.id_for_label }}">{% if field.name == 'username' %}Username or email{% else %}{{ field.label }}{% endif %}</label>{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>{% endfor %}
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            <button class="button button-primary" type="submit">Sign in <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="form-footnote">New to IN CAMP? <a href="{% url 'home' %}">Create an account</a></p>
+    </section>
+</section>
+{% endblock %}
